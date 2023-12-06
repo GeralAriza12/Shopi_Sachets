@@ -1,8 +1,14 @@
+import { useContext } from "react";
 import NavItem from "./NavItem";
+import { CartContext } from "../../Context/Context";
+
 
 function Navbar() {
+  const context = useContext(CartContext);
+  const activeStyle = "underline";
+
   const navItemsLeft = [
-    { name: "Achets", to: "/", className: "font-semibold text-xl" },
+    { name: "Sachets", to: "/", className: "font-semibold text-xl" },
     { name: "All", to: "/" },
     { name: "Clothes", to: "/clothes" },
     { name: "Electronics", to: "/electronics" },
@@ -14,9 +20,8 @@ function Navbar() {
     { name: "My Orders", to: "/my-orders" },
     { name: "My Account", to: "/my-account" },
     { name: "Sign In", to: "/sign-in" },
+    { name: "🛒" + context.count, className: "font-semibold text-xl" },
   ];
-
-  const activeStyle = "underline";
 
   return (
     <nav className="flex justify-between py-3 px-5">

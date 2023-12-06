@@ -7,7 +7,7 @@ function NavItem ({to, navbarName, className, activeStyle}) {
     <li className={(className)}>
       <NavLink 
         to={to} 
-        className={({isActive}) => (isActive? activeStyle : undefined)}
+        className={({isActive}) => (isActive? activeStyle : null)}
       >
         {navbarName}  
       </NavLink>
@@ -16,7 +16,7 @@ function NavItem ({to, navbarName, className, activeStyle}) {
 }
 
 NavItem.propTypes = {
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
   navbarName: PropTypes.string.isRequired,
   className: PropTypes.string,
   activeStyle: PropTypes.string,
