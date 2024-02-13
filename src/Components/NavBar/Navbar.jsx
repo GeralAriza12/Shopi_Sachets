@@ -8,11 +8,11 @@ function Navbar() {
   const activeStyle = "underline";
 
   const navItemsLeft = [
-    { name: "Sachets", to: "/", className: "font-semibold text-xl" },
+    { name: "Sachet", to: "/", className: "font-semibold text-xl" },
     { name: "All", to: "/" },
-    { name: "Clothes", to: "/clothes" },
+    { name: "Clothing", to: "/clothing" },
     { name: "Electronics", to: "/electronics" },
-    { name: "Furnitures", to: "/furnitures" },
+    { name: "Jewelery", to: "/jewelery" },
     { name: "Toys", to: "/toys" },
     { name: "Others", to: "/others" },
   ];
@@ -20,16 +20,17 @@ function Navbar() {
     { name: "My Orders", to: "/my-orders" },
     { name: "My Account", to: "/my-account" },
     { name: "Sign In", to: "/sign-in" },
-    { name: "🛒" + context.count, className: "font-semibold text-xl" },
+    { name: "🛒" + context.cartProducts.length, className: "font-medium text-xl" },
   ];
 
-  return (
-    <nav className="flex justify-between py-3 px-5">
+  return (  
+    <nav className="flex justify-between py-2 px-5">
       <ul className="flex justify-between items-center gap-3">
         {navItemsLeft.map(({ to, className, name }) => (
           <NavItem
             key={name}
             to={to}
+            onClick={() => context.setSearchByCategory(name)}
             className={className}
             navbarName={name}
             activeStyle={activeStyle}

@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 
-function NavItem ({to, navbarName, className, activeStyle}) {
+function NavItem ({onClick, to, navbarName, className, activeStyle}) {
   
   return (
-    <li className={(className)}>
+    <li onClick={onClick} className={(className)}>
       <NavLink 
         to={to} 
         className={({isActive}) => (isActive? activeStyle : null)}
@@ -16,6 +16,7 @@ function NavItem ({to, navbarName, className, activeStyle}) {
 }
 
 NavItem.propTypes = {
+  onClick: PropTypes.func,
   to: PropTypes.string,
   navbarName: PropTypes.string.isRequired,
   className: PropTypes.string,

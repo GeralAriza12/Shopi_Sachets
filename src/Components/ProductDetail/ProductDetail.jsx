@@ -7,22 +7,30 @@ const ProductDetail = () => {
     const context = useContext(CartContext)
 
   return (
-    <aside className={`${context.isOpenDetail ? 'flex' : 'hidden'} flex-col fixed right-0 border bg-white border-black rounded-lg w-[360px] h-full`}>
-        <div className="flex justify-between items-center p-5">
-            <h3 className="text-xl">Detail</h3>
-            <div>
-                <FontAwesomeIcon icon={faCircleXmark} onClick={() => context.closeDetail()} className="cursor-pointer"/>
+    <div className={`${context.isOpenDetail ? 'flex' : 'hidden'} flex-col fixed right-0 border bg-white border-black rounded-lg w-[340px] h-[635px]`}>
+        <aside className="p-5">
+            <div className="flex justify-between items-center py-3">
+                <h3 className="text-xl">Detail</h3>
+                <div>
+                    <FontAwesomeIcon icon={faCircleXmark} 
+                    onClick={() => context.closeDetail()} 
+                    className="cursor-pointer"/>
+                </div>
             </div>
-        </div>
-        <figure>
-            <div className="flex justify-between p-3">
-                <h2>{context.productToShow.title}</h2>
-                <h3>{context.productToShow.price}</h3>
-            </div>
-            <img src={context.productToShow.images} alt={context.productToShow.title} className="p-2 w-full h-4/5" />
-            <h4 className="pl-3 pr-3">{context.productToShow.description}</h4>
-        </figure>
-    </aside>
+            <figure>
+                <div className='flex justify-between'>
+                    <h2 className='font-medium text-md'>{context.productToShow.title}</h2>
+                    <h3 className='font-medium text-xl mb-2'>${context.productToShow.price}</h3>
+                </div>
+                <img 
+                    src={context.productToShow.image} 
+                    alt={context.productToShow.title} 
+                    className='p-2 w-full h-3/5' />
+                <h4 className='font-light text-sm'>{context.productToShow.description}</h4>
+            </figure>
+        </aside>
+    </div>
+    
   );
 };
 
