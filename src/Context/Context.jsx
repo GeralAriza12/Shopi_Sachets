@@ -4,7 +4,33 @@ import useFetch from "../Hooks/UseFetch";
 
 export const CartContext = createContext();
 
+export const initializeLocalStorage = () => {
+  const accountInLocalStorage = localStorage.getItem('account');
+	const singOutInLocalStorage = localStorage.getItem('sing-out');
+
+	let parsedAccount;
+	let parsedSingOut;
+
+	if (!accountInLocalStorage || !singOutInLocalStorage) {
+		localStorage.setItem('account', JSON.stringify({}));
+		localStorage.setItem('sing-out', JSON.stringify(false));
+		parsedAccount = {};
+		parsedSingOut = false;
+	} else {
+		parsedAccount = JSON.parse(accountInLocalStorage);
+		parsedSingOut = JSON.parse(singOutInLocalStorage);
+	}
+
+  return { parsedAccount, parsedSingOut };
+}
+
 export const CartProvider = ({ children }) => {
+  // My account
+  const [account, setAccount] = useState({});
+
+  // Sign out
+  const [signOut, setSignOut] = useState(false);
+
   // Shopping cart - increment
   const [count, setCount] = useState(0);
 
@@ -101,6 +127,10 @@ export const CartProvider = ({ children }) => {
         filteredItems,
         searchByCategory,
         setSearchByCategory,
+        account,
+        setAccount,
+        signOut,
+        setSignOut,
       }}
     >
       {children}
