@@ -5,23 +5,26 @@ import useFetch from "../Hooks/UseFetch";
 export const CartContext = createContext();
 
 export const initializeLocalStorage = () => {
-  const accountInLocalStorage = localStorage.getItem('account');
-	const singOutInLocalStorage = localStorage.getItem('sing-out');
+  const accountInLocalStorage = localStorage.getItem('account')
+  const signOutInLocalStorage = localStorage.getItem('sign-out')
+  let parsedAccount
+  let parsedSignOut
 
-	let parsedAccount;
-	let parsedSingOut;
+  if (!accountInLocalStorage) {
+    localStorage.setItem('account', JSON.stringify({}))
+    parsedAccount = {}
+  } else {
+    parsedAccount = JSON.parse(accountInLocalStorage)
+  }
 
-	if (!accountInLocalStorage || !singOutInLocalStorage) {
-		localStorage.setItem('account', JSON.stringify({}));
-		localStorage.setItem('sing-out', JSON.stringify(false));
-		parsedAccount = {};
-		parsedSingOut = false;
-	} else {
-		parsedAccount = JSON.parse(accountInLocalStorage);
-		parsedSingOut = JSON.parse(singOutInLocalStorage);
-	}
+  if (!signOutInLocalStorage) {
+    localStorage.setItem('sign-out', JSON.stringify(false))
+    parsedSignOut = false
+  } else {
+    parsedSignOut = JSON.parse(signOutInLocalStorage)
+  }
 
-  return { parsedAccount, parsedSingOut };
+  return { parsedAccount, parsedSignOut };
 }
 
 export const CartProvider = ({ children }) => {
