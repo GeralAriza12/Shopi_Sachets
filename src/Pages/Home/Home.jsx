@@ -32,7 +32,7 @@ function Home() {
           onChange={(event) => context.setSearchByTitle(event.target.value)}
         />
       </div>
-      <div className="grid grid-cols-4 w-full max-w-[70%]">{renderView()}</div>
+      <div className="grid grid-cols-4 w-full max-w-[70%] mb-9">{renderView()}</div>
       <ProductDetail />
     </Layout>
   );

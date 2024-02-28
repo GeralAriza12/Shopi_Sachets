@@ -9,8 +9,8 @@ function Navbar() {
   const activeStyle = "underline";
 
   const navItemsLeft = [
-    { name: "Sachet", to: "/", className: "font-semibold text-xl" },
-    { name: "All", to: "/" },
+    // { name: "Sachet", to: "/", className: "font-semibold text-xl" },
+    // { name: "All", to: "/" },
     { name: "Clothing", to: "/clothing" },
     { name: "Electronics", to: "/electronics" },
     { name: "Jewelery", to: "/jewelery" },
@@ -29,6 +29,15 @@ function Navbar() {
   const parsedSignOut = JSON.parse(signOut)
   const isUserSignOut = context.signOut || parsedSignOut
 
+  // Account 
+  const account = localStorage.getItem('account')
+  const parsedAccount = JSON.parse(account)
+
+  // Has an account
+  const withoutAccountInLStorage = parsedAccount ? Object.keys(parsedAccount).length === 0 : true
+  const withoutAccountInLState = context.account ? Object.keys(context.account).length === 0 : true
+  const hasUserAnAcount = !withoutAccountInLStorage || !withoutAccountInLState 
+
   const handleSignOut = () => {
     const stringifiedSignOut = JSON.stringify(true)
     localStorage.setItem('sign-out', stringifiedSignOut)
@@ -36,7 +45,28 @@ function Navbar() {
   }
 
   const renderView = () => {
-    if (isUserSignOut) {
+    if (hasUserAnAcount && !isUserSignOut) {
+      return (
+        <div className='flex items-center'>
+          <li className='text-black/60 pr-3'>
+            <h4>Welcome, {parsedAccount?.name} </h4>
+          </li>
+          <ul className="flex justify-between items-center gap-3">
+            {navItemsRight.map(({ to, className, name }) => (
+              <NavItem
+                key={name}
+                to={to}
+                onClick={() => handleSignOut()}
+                className={className}
+                navbarName={name}
+                activeStyle={activeStyle}
+              />
+            ))}
+          </ul>
+        </div>
+        
+      )
+    } else {
       return (
         <ul className="flex justify-between items-center gap-3">
           <li>
@@ -49,27 +79,31 @@ function Navbar() {
           </li>
         </ul>
       )
-    } else {
-      return (
-        <ul className="flex justify-between items-center gap-3">
-          {navItemsRight.map(({ to, className, name }) => (
-            <NavItem
-              key={name}
-              to={to}
-              onClick={() => handleSignOut()}
-              className={className}
-              navbarName={name}
-              activeStyle={activeStyle}
-            />
-          ))}
-        </ul>
-      )
     }
   }
 
   return (  
     <nav className="flex justify-between py-2 px-5">
       <ul className="flex justify-between items-center gap-3">
+        <li className='font-semibold text-xl'>
+          <NavLink 
+            to={`${isUserSignOut ? '/sign-in' : '/'}`}
+            className={({ isActive }) =>
+              isActive ? activeStyle : undefined
+            }>
+            Sachet
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to='/all'
+            onClick={() => context.setSearchByCategory()}
+            className={({ isActive }) =>
+              isActive ? activeStyle : undefined
+            }>
+            All
+          </NavLink>
+        </li>
         {navItemsLeft.map(({ to, className, name }) => (
           <NavItem
             key={name}

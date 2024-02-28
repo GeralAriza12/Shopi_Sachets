@@ -1,4 +1,5 @@
-import { BrowserRouter, useRoutes } from 'react-router-dom' ;
+import { useContext } from 'react';
+import { BrowserRouter, Navigate, useRoutes } from 'react-router-dom' ;
 
 import Home from "../Home/Home";
 import MyAccount from "../MyAccount/MyAccount";
@@ -6,7 +7,7 @@ import MyOrder from "../MyOrder/MyOrder";
 import MyOrders from "../MyOrders/MyOrders";
 import NotFound from "../NotFound/NotFound";
 import SignIn from "../SignIn/SignIn";
-import { CartProvider } from "../../Context/Context";
+import { CartContext, CartProvider, initializeLocalStorage } from "../../Context/Context";
 
 import Navbar from '../../Components/NavBar/Navbar';
 
@@ -15,8 +16,23 @@ import CheckOutMenu from '../../Components/CheckOutMenu/CheckOutMenu';
 import './App.css';
 
 const AppRoutes = () => {
+  const context = useContext(CartContext)
+  // Account
+  const account = localStorage.getItem('account')
+  const parsedAccount = JSON.parse(account)
+  // Sign Out
+  const signOut = localStorage.getItem('sign-out')
+  const parsedSignOut = JSON.parse(signOut)
+  // Has an account
+  const noAccountInLocalStorage = parsedAccount ? Object.keys(parsedAccount).length === 0 : true
+  const noAccountInLocalState = Object.keys(context.account).length === 0
+  const hasUserAnAccount = !noAccountInLocalStorage || !noAccountInLocalState
+  const isUserSignOut = context.signOut || parsedSignOut
+
+
     let routes = useRoutes ([
-        {path: "/", element: <Home />},
+        {path: "/", element: hasUserAnAccount && !isUserSignOut ? <Home /> : <Navigate replace to={'/sign-in'}/>},
+        {path: "/all", element: <Home />},
         {path: "/clothing", element: <Home />},
         {path: "/electronics", element: <Home />},
         {path: "/jewelery", element: <Home />},
@@ -36,7 +52,8 @@ const AppRoutes = () => {
 }
 
 function App() {
-
+  initializeLocalStorage()
+  
     return (
       <div>
         <CartProvider>
