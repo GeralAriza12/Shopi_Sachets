@@ -31,6 +31,12 @@ export const CartProvider = ({ children }) => {
   // My account
   const [account, setAccount] = useState({});
 
+ const [isUserSignedIn, setIsUserSignedIn] = useState(false);
+
+ const signIn = () => {
+  setIsUserSignedIn(true);
+  };
+
   // Sign out
   const [signOut, setSignOut] = useState(false);
 
@@ -132,8 +138,11 @@ export const CartProvider = ({ children }) => {
         setSearchByCategory,
         account,
         setAccount,
-        signOut,
+        // signOut,
         setSignOut,
+        isUserSignedIn, 
+        signIn, 
+        signOut
       }}
     >
       {children}

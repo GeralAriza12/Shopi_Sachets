@@ -21,7 +21,7 @@ function Navbar() {
     { name: "My Orders", to: "/my-orders" },
     { name: "My Account", to: "/my-account" },
     { name: "Sign Out", to: "/sign-in"},
-    { name: "🛒" + context.cartProducts.length, className: "font-medium text-xl" },
+    { name: "🛒" + context.cartProducts.length, className: "font-medium text-xl", to: "/my-orders" },
   ];
   
   // Sign Out 
@@ -39,9 +39,13 @@ function Navbar() {
   const hasUserAnAcount = !withoutAccountInLStorage || !withoutAccountInLState 
 
   const handleSignOut = () => {
-    const stringifiedSignOut = JSON.stringify(true)
+    const currentSignOutState = localStorage.getItem('sign-out');
+    if (currentSignOutState === 'true') {
+      return;
+    }
+    const stringifiedSignOut = JSON.stringify(false)
     localStorage.setItem('sign-out', stringifiedSignOut)
-    context.setSignOut(true)
+    context.signIn(false)
   }
 
   const renderView = () => {
@@ -74,7 +78,7 @@ function Navbar() {
               to="/sign-in"
               className={({ isActive }) => isActive ? activeStyle : undefined }
               onClick={() => handleSignOut()}>
-              Sign out
+              Sign In
             </NavLink>
           </li>
         </ul>
@@ -83,7 +87,7 @@ function Navbar() {
   }
 
   return (  
-    <nav className="flex justify-between py-2 px-5">
+    <nav className="flex justify-between fixed z-10 top-0 w-full py-2 px-5 bg-white">
       <ul className="flex justify-between items-center gap-3">
         <li className='font-semibold text-xl'>
           <NavLink 

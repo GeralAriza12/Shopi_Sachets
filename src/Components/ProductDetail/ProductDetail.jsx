@@ -2,13 +2,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
 import { CartContext } from "../../Context/Context";
+import './ProductDetail.css'
 
 const ProductDetail = () => {
     const context = useContext(CartContext)
 
   return (
-    <div className={`${context.isOpenDetail ? 'flex' : 'hidden'} flex-col fixed right-0 border bg-white border-black rounded-lg w-[340px] h-[635px]`}>
-        <aside className="p-5">
+    <aside 
+        className={`${context.isOpenDetail ? 'flex' : 'hidden'} product-detail flex-col fixed right-0 border bg-white border-black rounded-lg`}>
+        <div className="p-5">
             <div className="flex justify-between items-center py-3">
                 <h3 className="text-xl">Detail</h3>
                 <div>
@@ -28,8 +30,8 @@ const ProductDetail = () => {
                     className='p-2 w-full h-3/5' />
                 <h4 className='font-light text-sm'>{context.productToShow.description}</h4>
             </figure>
-        </aside>
-    </div>
+        </div>
+    </aside>
     
   );
 };

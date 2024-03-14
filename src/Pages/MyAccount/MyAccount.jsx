@@ -56,11 +56,11 @@ function MyAccount() {
         </div>
         <div className="myAccText">
           <label htmlFor="email">Email: </label>
-          <input type="text" id="email" name="email" defaultValue={parsedAccount.email0} placeholder="Example@example.com" />
+          <input type="text" id="email" name="email" defaultValue={parsedAccount.email} placeholder="Example@example.com" />
         </div>
         <div className="myAccText">
           <label htmlFor="password">Password: </label>
-          <input type="text" id="password" name="password" defaultValue={parsedAccount.password} placeholder="******"/>
+          <input type="password" id="password" name="password" defaultValue={parsedAccount.password} placeholder="******"/>
         </div>
         <button
           className='bg-black text-white w-full rounded-lg py-3 mb-9'

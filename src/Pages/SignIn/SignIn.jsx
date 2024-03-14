@@ -18,10 +18,16 @@ function SignIn() {
   const hasUserAnAcount = !withoutAccountInLStorage || !withoutAccountInLState 
 
   const handleSignIn = () => {
-    const stringifiedSignOut = JSON.stringify(false)
-    localStorage.setItem('sign-out', stringifiedSignOut)
-    context.setSignOut(false)
+    const currentSignOutState = localStorage.getItem('sign-out')
+    if (currentSignOutState === 'false') {
+      return;
+    }
 
+    const stringifiedSignOut = JSON.stringify(true)
+    localStorage.setItem('sign-out', stringifiedSignOut)
+    context.signOut(true)
+
+    // Redirigir al usuario a la página principal
     return <Navigate replace to={'/'} />
   }
 
@@ -64,7 +70,7 @@ function SignIn() {
           <a className='font-light text-xs underline underline-offset-4' href='/'>Forgot my password</a>
         </div>
         <button
-          className='border border-black disabled:text-black/40 disabled:border-black/40 rounded-lg mt-6 py-3'
+          className='border border-black disabled:text-black/40 disabled:border-black/40 rounded-lg mt-6 py-3 mb-9'
           onClick={() => setView('create-user-info')}
           disabled={hasUserAnAcount}>
           Sign up
@@ -103,7 +109,7 @@ function SignIn() {
         <div className='flex flex-col gap-1'>
           <label htmlFor="password" className='font-light text-sm'>Your password:</label>
           <input
-            type="text"
+            type="password"
             id="password"
             name="password"
             defaultValue={parsedAccount?.password}
@@ -114,7 +120,7 @@ function SignIn() {
         </div>
         <Link to="/">
           <button
-            className='bg-black text-white w-full rounded-lg py-3'
+            className='bg-black text-white w-full rounded-lg py-3 mb-9'
             onClick={() => createAnAccount()}>
             Create
           </button>
@@ -127,7 +133,7 @@ function SignIn() {
 
   return (
     <Layout>
-      <h1 className="font-medium text-xl text-center mb-6 w-80">Welcome</h1>
+      <h1 className="font-medium text-xl text-center mb-6 w-80 mt-16">Welcome</h1>
       {renderView()}
     </Layout>
   )

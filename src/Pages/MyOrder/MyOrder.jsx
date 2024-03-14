@@ -1,9 +1,9 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import OrderCard from "../../Components/OrderCard/OrderCard";
 import { CartContext } from "../../Context/Context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
 import { faCircleChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 function MyOrder() {
@@ -14,7 +14,7 @@ function MyOrder() {
 
   return (
     <Layout>
-      <div className="flex items-center justify-center relative w-80 py-2">
+      <div className="flex items-center justify-center relative w-80 mt-10 py-2">
         <Link to="/my-orders" className="absolute left-0">
           <FontAwesomeIcon className="pr-5 cursor-pointer"
             icon={faCircleChevronLeft}/>

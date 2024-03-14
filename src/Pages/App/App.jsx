@@ -24,9 +24,9 @@ const AppRoutes = () => {
   const signOut = localStorage.getItem('sign-out')
   const parsedSignOut = JSON.parse(signOut)
   // Has an account
-  const noAccountInLocalStorage = parsedAccount ? Object.keys(parsedAccount).length === 0 : true
-  const noAccountInLocalState = Object.keys(context.account).length === 0
-  const hasUserAnAccount = !noAccountInLocalStorage || !noAccountInLocalState
+  const withoutAccountInLStorage = parsedAccount ? Object.keys(parsedAccount).length === 0 : true
+  const withoutAccountInLState = Object.keys(context.account).length === 0
+  const hasUserAnAccount = !withoutAccountInLStorage || !withoutAccountInLState
   const isUserSignOut = context.signOut || parsedSignOut
 
 
