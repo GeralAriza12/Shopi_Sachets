@@ -6,6 +6,7 @@ import './MyAccount.css'
 function MyAccount() {
   const context = useContext(CartContext);
   const [view, setView] = useState('user-info');
+  const [errors, setErrors] = useState({});
   const form = useRef(null);
 
   // Account
@@ -18,34 +19,35 @@ function MyAccount() {
     const name = formData.get('name');
     const email = formData.get('email');
     const password = formData.get('password');
+    const newErrors = {};
 
     // Validations
     if (!name.trim()) {
-      alert('Please enter your name');
-      return;
+      newErrors.name = 'Please enter your name';
     }
 
     if (!email.trim()) {
-      alert('Please enter your email');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address');
-      return;
+      newErrors.email = 'Please enter your email';
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        newErrors.email = 'Please enter a valid email address';
+      }
     }
 
     if (!password.trim()) {
-      alert('Please enter your password');
-      return;
+      newErrors.password = 'Please enter your password';
+    } else {
+      // Check password strength
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
+      if (!passwordRegex.test(password)) {
+        newErrors.password = 'Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.';
+      }
     }
-
-    // Check password strength
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      alert('Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.');
-      return;
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return; // Evita continuar si hay errores
     }
 
     const data = { name, email, password };
@@ -83,14 +85,17 @@ function MyAccount() {
         <div className="myAccText">
           <label htmlFor="name">Your name: </label>
           <input type="text" id="name" name="name" defaultValue={parsedAccount.name} placeholder="Your Name" required/>
+          {errors.name && <p className="text-red-500">{errors.name}</p>}
         </div>
         <div className="myAccText">
           <label htmlFor="email">Email: </label>
           <input type="email" id="email" name="email" defaultValue={parsedAccount.email} placeholder="Example@example.com" required />
+          {errors.email && <p className="text-red-500">{errors.email}</p>}
         </div>
         <div className="myAccText">
           <label htmlFor="password">Password: </label>
           <input type="password" id="password" name="password" defaultValue={parsedAccount.password} placeholder="******" required />
+          {errors.password && <p className="text-red-500">{errors.password}</p>}
         </div>
         <button
           className='bg-black text-white w-full rounded-lg py-3 mb-9'

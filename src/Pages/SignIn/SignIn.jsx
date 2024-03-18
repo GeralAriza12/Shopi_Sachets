@@ -1,11 +1,13 @@
 import { useContext, useRef, useState } from "react";
-import { Link, Navigate,  } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { CartContext } from "../../Context/Context";
 import Layout from "../../Components/Layout/Layout";
 
 function SignIn() {
   const context = useContext(CartContext);
   const [view, setView] = useState('user-info')
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
   const form = useRef(null)
 
   // Account
@@ -48,22 +50,22 @@ function SignIn() {
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        alert('Please enter a valid email address');
-        return;
+        newErrors.email = 'Please enter a valid email address';
       }
     }
 
-    
-
     if (!password.trim()) {
-      alert('Please enter your password');
-      return;
+      newErrors.password = 'Please enter your password';
+    } else {
+      // Check password strength
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
+      if (!passwordRegex.test(password)) {
+        newErrors.password = 'Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.';
+      }
     }
 
-    // Check password strength
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      alert('Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.');
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -76,6 +78,9 @@ function SignIn() {
 
      // sign In
     handleSignIn()
+
+    // Redirigir a la página de inicio
+    navigate('/');
   }
 
   const rederLogin = () => {
@@ -88,7 +93,6 @@ function SignIn() {
         <p>
           <span className='font-light text-sm'>Password: </span>
           <input type="password" value={parsedAccount?.password} disabled />
-          {/* <span> {parsedAccount?.password} </span> */}
         </p>
         <Link
           to="/">
@@ -127,6 +131,7 @@ function SignIn() {
             placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
             required
           />
+          {errors.name && <p className="text-red-500">{errors.name}</p>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor="email" className='font-light text-sm'>Your email:</label>
@@ -140,6 +145,7 @@ function SignIn() {
             placeholder:font-light placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
             required
           />
+          {errors.email && <p className="text-red-500">{errors.email}</p>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor="password" className='font-light text-sm'>Your password:</label>
@@ -153,14 +159,14 @@ function SignIn() {
             placeholder:font-light placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
             required
           />
+          {errors.password && <p className="text-red-500">{errors.password}</p>}
         </div>
-        <Link to="/">
           <button
+            type="button"
             className='bg-black text-white w-full rounded-lg py-3 mb-9'
             onClick={() => createAnAccount()}>
             Create
           </button>
-        </Link>
       </form>
     )
   }
