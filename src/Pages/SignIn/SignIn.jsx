@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate,  } from "react-router-dom";
 import { CartContext } from "../../Context/Context";
 import Layout from "../../Components/Layout/Layout";
 
@@ -32,17 +32,49 @@ function SignIn() {
   }
 
   const createAnAccount = () => {
-    const formData = new FormData(form.current)
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      password: formData.get('password')
+    const formData = new FormData(form.current);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const password = formData.get('password');
+    const newErrors = {};
+
+    // Validations
+    if (!name.trim()) {
+      newErrors.name = 'Please enter your name';
     }
+
+    if (!email.trim()) {
+      newErrors.email = 'Please enter your email';
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
+        return;
+      }
+    }
+
+    
+
+    if (!password.trim()) {
+      alert('Please enter your password');
+      return;
+    }
+
+    // Check password strength
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      alert('Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.');
+      return;
+    }
+
+    const data = { name, email, password };
+
     // Create Account
-    const stringifiedAccount = JSON.stringify(data)
-    localStorage.setItem('account', stringifiedAccount)
-    context.setAccount(data)
-    // sign In
+    const stringifiedAccount = JSON.stringify(data);
+    localStorage.setItem('account', stringifiedAccount);
+    context.setAccount(data);
+
+     // sign In
     handleSignIn()
   }
 
@@ -55,13 +87,14 @@ function SignIn() {
         </h2>
         <p>
           <span className='font-light text-sm'>Password: </span>
-          <span> {parsedAccount?.password} </span>
+          <input type="password" value={parsedAccount?.password} disabled />
+          {/* <span> {parsedAccount?.password} </span> */}
         </p>
         <Link
           to="/">
           <button
             className='bg-black disabled:bg-black/40 text-white  w-full rounded-lg py-3 mt-4 mb-2'
-            onClick={() => handleSignIn()}
+            onClick={createAnAccount}
             disabled={!hasUserAnAcount}>
             Login
           </button>
@@ -92,18 +125,20 @@ function SignIn() {
             placeholder="Name"
             className='rounded-lg border border-black placeholder:font-light
             placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
+            required
           />
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor="email" className='font-light text-sm'>Your email:</label>
           <input
-            type="text"
+            type="email"
             id="email"
             name="email"
             defaultValue={parsedAccount?.email}
             placeholder="Example@example.com"
             className='rounded-lg border border-black
             placeholder:font-light placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
+            required
           />
         </div>
         <div className='flex flex-col gap-1'>
@@ -116,6 +151,7 @@ function SignIn() {
             placeholder="******"
             className='rounded-lg border border-black
             placeholder:font-light placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
+            required
           />
         </div>
         <Link to="/">
